@@ -1,0 +1,17 @@
+## Requirements for Windows users
+# Recommended setup in PowerShell (run from project directory):
+# python -m venv .venv
+# .\.venv\Scripts\Activate.ps1
+# python -m pip install --upgrade pip setuptools wheel
+# python -m pip install -r requirements.txt
+
+# The project uses cryptography only if you enable the encrypted vault modules.
+# Keep this dependency but installing it is optional unless you use the vaults.
+cryptography>=41.0.0
+
+# If you run into build errors installing `cryptography` on Windows, ensure
+# you have the latest pip and wheel (see commands above) or install a prebuilt
+# wheel from PyPI (pip will normally fetch a suitable wheel). If you still
+# experience problems, install the "Build Tools for Visual Studio" or use
+# the Windows Subsystem for Linux (WSL).
+
