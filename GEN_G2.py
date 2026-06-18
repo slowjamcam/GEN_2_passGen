@@ -16,12 +16,12 @@ Run: python GEN_G2.py
 
 from __future__ import annotations
 
-from plaintext_store import append_plaintext_entry
+from plaintext_store import append_plaintext_entry, append_plaintext_file
 
 import random
 import string
 import sys
-import os
+
 
 
 def prompt_yes_no(prompt: str) -> bool:
@@ -34,6 +34,7 @@ def prompt_yes_no(prompt: str) -> bool:
         print("Please answer 'y' or 'n'.")
 
 
+""" NOT USED
 def prompt_choice(prompt: str, choices: list[str]) -> str:
     choices_lower = [c.lower() for c in choices]
     while True:
@@ -41,7 +42,7 @@ def prompt_choice(prompt: str, choices: list[str]) -> str:
         if resp in choices_lower:
             return resp
         print(f"Please choose one of: {', '.join(choices)}")
-
+"""
 
 def prompt_int(prompt: str, min_value: int = 1) -> int:
     while True:
@@ -157,17 +158,28 @@ def main() -> None:
                 print("Your password is valid and accepted.")
                 print("Generated/Accepted password: ", pw)
 
+                # Collect metadata once
+                t_title = input("Title / site name: ").strip() or "(no title)"
+                t_user = input("Username: ").strip()
+                t_notes = input("Notes (optional): ").strip()
+
                 # Offer to save plaintext CSV copy
                 if prompt_yes_no("Save this password to a CSV file? (not secure)"):
                     file_path = input("Enter filename (default: stored_passwords.csv): ").strip() or "stored_passwords.csv"
                     try:
-                        t_title = input("Title / site name: ").strip() or "(no title)"
-                        t_user = input("Username (optional): ").strip()
-                        t_notes = input("Notes (optional): ").strip()
                         append_plaintext_entry(title=t_title, username=t_user, password=pw, notes=t_notes, path=file_path)
                         print(f"Appended CSV entry to {file_path}")
                     except Exception as exc:
                         print("Failed to write CSV file:", exc)
+
+                # Offer to save to a simple plaintext file as well
+                if prompt_yes_no("Also save this password to a plain text file? (not secure)"):
+                    txt_path = input("Enter filename (default: stored_passwords.txt): ").strip() or "stored_passwords.txt"
+                    try:
+                        append_plaintext_file(title=t_title, username=t_user, password=pw, notes=t_notes, path=txt_path)
+                        print(f"Appended plaintext entry to {txt_path}")
+                    except Exception as exc:
+                        print("Failed to write plaintext file:", exc)
 
                 return
             print("Password is missing the following requirements:")
@@ -206,17 +218,28 @@ def main() -> None:
         pw = generate_password(requested, difficulty)
         print("Generated password:", pw)
 
+        # Collect metadata once
+        t_title = input("Title / site name: ").strip() or "(no title)"
+        t_user = input("Username: ").strip()
+        t_notes = input("Notes (optional): ").strip()
+
         # Offer to save to a CSV file (vault disabled)
         if prompt_yes_no("Save this password to a CSV file? (not secure)"):
             file_path = input("Enter filename (default: stored_passwords.csv): ").strip() or "stored_passwords.csv"
             try:
-                t_title = input("Title / site name: ").strip() or "(no title)"
-                t_user = input("Username (optional): ").strip()
-                t_notes = input("Notes (optional): ").strip()
                 append_plaintext_entry(title=t_title, username=t_user, password=pw, notes=t_notes, path=file_path)
                 print(f"Appended CSV entry to {file_path}")
             except Exception as exc:
                 print("Failed to write CSV file:", exc)
+
+        # Offer to save to a simple plaintext file as well
+        if prompt_yes_no("Also save this password to a plain text file? (not secure)"):
+            txt_path = input("Enter filename (default: stored_passwords.txt): ").strip() or "stored_passwords.txt"
+            try:
+                append_plaintext_file(title=t_title, username=t_user, password=pw, notes=t_notes, path=txt_path)
+                print(f"Appended plaintext entry to {txt_path}")
+            except Exception as exc:
+                print("Failed to write plaintext file:", exc)
 
         return
 

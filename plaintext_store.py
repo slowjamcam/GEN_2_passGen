@@ -9,7 +9,6 @@ from __future__ import annotations
 import os
 import csv
 from datetime import datetime
-from typing import Optional
 
 
 def append_plaintext_entry(
@@ -41,3 +40,38 @@ def append_plaintext_entry(
             password,
             notes,
         ])
+
+
+def append_plaintext_file(
+    title: str,
+    username: str,
+    password: str,
+    notes: str = "",
+    path: str = "stored_passwords.txt",
+) -> None:
+    """
+    Append a simple human-readable plaintext entry to `path`.
+
+    Each entry is separated by a line of dashes and includes a UTC timestamp.
+    """
+    # Ensure directory exists if a directory was provided
+    dirpath = os.path.dirname(path)
+    if dirpath:
+        os.makedirs(dirpath, exist_ok=True)
+
+    entry_lines = [
+        "-----",
+        f"timestamp: {datetime.utcnow().isoformat()}Z",
+        f"title: {title}",
+        f"username: {username}",
+        f"password: {password}",
+    ]
+    if notes:
+        entry_lines.append(f"notes: {notes}")
+    entry_lines.append("\n")
+
+    # Append the entry
+    with open(path, "a", encoding="utf-8") as fh:
+        fh.write("\n".join(entry_lines))
+
+
