@@ -15,3 +15,5 @@ cryptography>=41.0.0
 # experience problems, install the "Build Tools for Visual Studio" or use
 # the Windows Subsystem for Linux (WSL).
 
+
+pygetwindow

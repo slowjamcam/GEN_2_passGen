@@ -1,6 +1,6 @@
 @echo off
 REM Setup script for Windows users
-REM This creates a virtual environment and installs dependencies
+REM This creates a virtual environment, installs dependencies, and runs the application
 
 cd /d "%~dp0"
 
@@ -42,10 +42,16 @@ echo ========================================
 echo Setup complete!
 echo ========================================
 echo.
-echo You can now run the password generator with:
-echo   - Double-click: run.bat
-echo   - Or manually: .\.venv\Scripts\activate.bat ^&^& python GEN_G2.py
+echo Starting Password Generator...
 echo.
 
-pause
+REM Run the application
+python GEN_G2.py
+if errorlevel 1 (
+    echo.
+    echo Error: Could not run the application.
+    echo You can manually run it with: .\.venv\Scripts\activate.bat ^&^& python GEN_G2.py
+    pause
+    exit /b 1
+)
 
